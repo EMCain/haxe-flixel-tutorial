@@ -15,7 +15,7 @@ class Player extends FlxSprite
     {
         super(X, Y);
         loadGraphic(AssetPaths.player__png, true, 16, 16);
-        neko.Lib.print(this.animation.frames);
+        //neko.Lib.print(this.animation.frames);
         // Set direction
         setFacingFlip(FlxObject.LEFT, false, false); 
         setFacingFlip(FlxObject.RIGHT, true, false);

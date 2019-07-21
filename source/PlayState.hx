@@ -13,6 +13,8 @@ import flixel.tile.FlxBaseTilemap.FlxTilemapAutoTiling;
 import flixel.addons.editors.tiled.TiledMap;
 import flixel.addons.editors.tiled.TiledTileLayer;
 import flixel.addons.editors.tiled.TiledObjectLayer;
+import flixel.addons.editors.tiled.TiledPropertySet;
+
 
 class PlayState extends FlxState
 {
@@ -20,6 +22,7 @@ class PlayState extends FlxState
 	var _map:TiledMap;
 	var _mWalls:FlxTilemap;
 	var _grpFlowers:FlxTypedGroup<Flower>;
+	var _grpEnemies:FlxTypedGroup<Enemy>;
 
 	override public function create():Void
 	{
@@ -45,11 +48,14 @@ class PlayState extends FlxState
 		_grpFlowers = new FlxTypedGroup<Flower>();
 		add(_grpFlowers);
 
+		_grpEnemies = new FlxTypedGroup<Enemy>();
+		add(_grpEnemies);
+
 		_player = new Player();
 		var tmpMap:TiledObjectLayer = cast _map.getLayer("player-layer");
 		for (e in tmpMap.objects)
 		{
-			placeEntities(e.name, e.xmlData.x);
+			placeEntities(e.name, e.xmlData.x, e.properties);
 		}
 		add(_player);
 
@@ -58,7 +64,7 @@ class PlayState extends FlxState
 		super.create();
 	}
 
-	function placeEntities(entityName:String, entityData:Xml):Void 
+	function placeEntities(entityName:String, entityData:Xml, properties:TiledPropertySet):Void 
 	{
 		var x:Int = Std.parseInt(entityData.get("x"));
 		var y:Int = Std.parseInt(entityData.get("y"));
@@ -67,6 +73,9 @@ class PlayState extends FlxState
 			_player.y = y;
 		} else if (entityName == "flower") {
 			_grpFlowers.add(new Flower(x + 4, y + 4));
+		} else if (entityName == "enemy") 
+		{
+			_grpEnemies.add(new Enemy(x + 4, y, properties.get("etype")));
 		}
 	}
 	
